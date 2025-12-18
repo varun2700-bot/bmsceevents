@@ -113,6 +113,21 @@ export default function Admin() {
   }, [isAdmin]);
 
   const fetchData = async () => {
+    // Defense-in-depth: Verify admin role server-side before fetching
+    if (user) {
+      const { data: roleCheck } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+      
+      if (!roleCheck) {
+        navigate('/');
+        return;
+      }
+    }
+
     const [eventsRes, newsRes] = await Promise.all([
       supabase.from('events').select('*').order('date', { ascending: false }),
       supabase.from('news').select('*').order('created_at', { ascending: false }),
