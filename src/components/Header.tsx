@@ -83,7 +83,7 @@ export function Header() {
             ) : (
               <Link to="/auth">
                 <Button variant="secondary" size="sm" className="font-bold">
-                  Admin Login
+                  Login
                 </Button>
               </Link>
             )}
